@@ -18,6 +18,8 @@ import { TagModule } from './tag/tag.module';
 import { RoleModule } from './role/role.module';
 import { ImageModule } from './image/image.module';
 import { UserSeeder } from './database/seeders/user.seeder';
+import { TaskSeeder } from './database/seeders/task.seeder';
+import { RecommendationsModule } from './recommendations/recommendations.module';
 
 @Module({
   imports: [
@@ -28,6 +30,7 @@ import { UserSeeder } from './database/seeders/user.seeder';
       synchronize: true,
     }),
     TypeOrmModule.forFeature([User, Role, Tag, Status, Task]),
+    RecommendationsModule,
     AuthModule,
     TaskModule,
     UserModule,
@@ -37,6 +40,6 @@ import { UserSeeder } from './database/seeders/user.seeder';
     ImageModule
   ],
   controllers: [AppController],
-  providers: [AppService, RoleSeeder, StatusSeeder, TagSeeder, UserSeeder],
+  providers: [AppService, RoleSeeder, StatusSeeder, TagSeeder, UserSeeder, TaskSeeder],
 })
 export class AppModule {}

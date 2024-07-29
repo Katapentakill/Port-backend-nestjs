@@ -9,6 +9,18 @@ export class User {
   @Column({ unique: true })
   email: string;
 
+  @Column({ unique: false })
+  name: string;
+
+  @Column({ unique: false })
+  lastname: string;
+
+  @Column({ type: 'varchar', length: 255 }) 
+  Job: string;
+
+  @Column({ type: 'text' }) 
+  Curriculum: string;
+
   @Column()
   password: string;
 
@@ -21,3 +33,4 @@ export class User {
   @Column()
   roleId: number;
 }
+
