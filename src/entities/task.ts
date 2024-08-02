@@ -14,6 +14,21 @@ export class Task {
   @Column()
   description: string;
 
+  @Column({ type: 'text', nullable: true })
+  requiredSkills: string;
+
+  @Column({ type: 'text', nullable: true })
+  requiredSkillsNormalized: string;
+
+  @Column({ type: 'text', nullable: true })
+  requiredExpertise: string;
+
+  @Column({ type: 'text', nullable: true })
+  requiredExpertiseNormalized: string;
+
+  @Column({ type: 'text', nullable: true })
+  descriptionNormalized: string;
+
   @ManyToMany(() => Tag, tag => tag.tasks)
   @JoinTable()
   tags: Tag[];

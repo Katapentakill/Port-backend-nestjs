@@ -14,14 +14,15 @@ export class TaskController {
      */
     @Post('createTask')
     async createTask(@Body() taskCreateDto: TaskCreateDto): Promise<Task> {
-    console.log('Datos recibidos en createTask Controller:', taskCreateDto); // Log de entrada
-
-    try {
-        return await this.taskService.createTask(taskCreateDto);
-    } catch (error) {
-        console.error('Error en createTask Controller:', error); // Log de errores
-        throw new HttpException(error.message, error.status || HttpStatus.INTERNAL_SERVER_ERROR);
+        return this.taskService.createTask(taskCreateDto);
     }
+
+    @Put(':id')
+    async updateTask(
+        @Param('id') id: number,
+        @Body() updateDto: TaskCreateDto
+    ): Promise<Task> {
+        return this.taskService.updateTask(id, updateDto);
     }
 
     /**

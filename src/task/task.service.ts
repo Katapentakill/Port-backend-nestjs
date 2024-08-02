@@ -6,6 +6,7 @@ import { User } from 'src/entities/user';
 import { Status } from 'src/entities/status';
 import { Tag } from 'src/entities/tag';
 import { Repository } from 'typeorm';
+import { normalizeText } from 'src/utils/normalizeText';
 
 @Injectable()
 export class TaskService {
@@ -27,32 +28,44 @@ export class TaskService {
    * @returns Una promesa que resuelve a la tarea creada.
    */
     async createTask(taskCreateDto: TaskCreateDto): Promise<Task> {
-        console.log('Datos recibidos en createTask:', taskCreateDto); // Log de entrada
-      
-        if (!taskCreateDto.name || !taskCreateDto.description || !taskCreateDto.creationDate || !taskCreateDto.dueDate || !taskCreateDto.statusId) {
-          throw new HttpException('Datos incompletos para crear la tarea', HttpStatus.BAD_REQUEST);
+        // Normaliza los campos requeridos
+        const normalizedTask = {
+            ...taskCreateDto,
+            requiredSkillsNormalized: normalizeText(taskCreateDto.requiredSkills),
+            requiredExpertiseNormalized: normalizeText(taskCreateDto.requiredExpertise),
+            descriptionNormalized: normalizeText(taskCreateDto.description),
+        };
+    
+        // Crea y guarda la nueva tarea
+        const newTask = this.taskRepository.create(normalizedTask);
+        return this.taskRepository.save(newTask);
+    }
+
+    async updateTask(taskId: number, updateDto: TaskCreateDto): Promise<Task> {
+        const task = await this.taskRepository.findOne({ where: { id: taskId } });
+        if (!task) {
+            throw new HttpException('Tarea no encontrada', HttpStatus.NOT_FOUND);
         }
-      
-        try {
-          const task = this.taskRepository.create(taskCreateDto);
-      
-          if (taskCreateDto.statusId !== undefined) {
-            const status = await this.statusRepository.findOne({ where: { id: taskCreateDto.statusId } });
-            if (!status) {
-              console.log('Status no encontrado:', taskCreateDto.statusId); // Log si el status no se encuentra
-              throw new HttpException('Status no encontrado', HttpStatus.BAD_REQUEST);
-            }
-          }
-      
-          const savedTask = await this.taskRepository.save(task);
-          console.log('Tarea creada:', savedTask); // Log de tarea guardada
-          return savedTask;
-        } catch (error) {
-          console.error('Error en createTask:', error); // Log de errores
-          throw new HttpException('Error al crear la tarea', HttpStatus.INTERNAL_SERVER_ERROR);
+    
+        // Normaliza los campos si están presentes en el DTO
+        if (updateDto.requiredSkills) {
+            task.requiredSkills = updateDto.requiredSkills;
+            task.requiredSkillsNormalized = normalizeText(updateDto.requiredSkills);
         }
-      }
-      
+        if (updateDto.requiredExpertise) {
+            task.requiredExpertise = updateDto.requiredExpertise;
+            task.requiredExpertiseNormalized = normalizeText(updateDto.requiredExpertise);
+        }
+        if (updateDto.description) {
+            task.description = updateDto.description;
+            task.descriptionNormalized = normalizeText(updateDto.description);
+        }
+    
+        // Actualiza los demás campos
+        Object.assign(task, updateDto);
+    
+        return this.taskRepository.save(task);
+    }
 
     /**
      * Elimina una tarea por su ID.

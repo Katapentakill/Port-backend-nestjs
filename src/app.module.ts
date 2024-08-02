@@ -13,13 +13,14 @@ import { TagSeeder } from './database/seeders/tag.seeder';
 import { AuthModule } from './auth/auth.module';
 import { TaskModule } from './task/task.module';
 import { UserModule } from './user/user.module';
+import { TaskSimilarityModule } from './recommend/task-similarity.module';
 import { StatusModule } from './status/status.module';
 import { TagModule } from './tag/tag.module';
 import { RoleModule } from './role/role.module';
 import { ImageModule } from './image/image.module';
 import { UserSeeder } from './database/seeders/user.seeder';
 import { TaskSeeder } from './database/seeders/task.seeder';
-import { RecommendationsModule } from './recommendations/recommendations.module';
+import { UserSeeder2 } from './database/seeders/user2.seeder';
 
 @Module({
   imports: [
@@ -30,8 +31,8 @@ import { RecommendationsModule } from './recommendations/recommendations.module'
       synchronize: true,
     }),
     TypeOrmModule.forFeature([User, Role, Tag, Status, Task]),
-    RecommendationsModule,
     AuthModule,
+    TaskSimilarityModule,
     TaskModule,
     UserModule,
     StatusModule,
@@ -40,6 +41,6 @@ import { RecommendationsModule } from './recommendations/recommendations.module'
     ImageModule
   ],
   controllers: [AppController],
-  providers: [AppService, RoleSeeder, StatusSeeder, TagSeeder, UserSeeder, TaskSeeder],
+  providers: [AppService, RoleSeeder, StatusSeeder, TagSeeder, UserSeeder, TaskSeeder, UserSeeder2],
 })
 export class AppModule {}

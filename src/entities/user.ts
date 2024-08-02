@@ -16,10 +16,13 @@ export class User {
   lastname: string;
 
   @Column({ type: 'varchar', length: 255 }) 
-  Job: string;
+  job: string;
 
   @Column({ type: 'text' }) 
-  Curriculum: string;
+  curriculum: string;
+
+  @Column({ type: 'text', nullable: true })
+  curriculumNormalized: string;  // Nuevo campo para el curriculum normalizado
 
   @Column()
   password: string;
@@ -32,5 +35,16 @@ export class User {
 
   @Column()
   roleId: number;
-}
 
+  @Column({ type: 'text', nullable: true }) 
+  skills: string;
+
+  @Column({ type: 'text', nullable: true }) 
+  skillsNormalized: string;
+
+  @Column({ type: 'text', nullable: true }) 
+  expertise: string;
+
+  @Column({ type: 'text', nullable: true }) 
+  expertiseNormalized: string;
+}
