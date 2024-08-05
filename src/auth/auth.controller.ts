@@ -2,6 +2,7 @@ import { Controller, Post, Body, Res, HttpStatus } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthDto } from '../DTO/auth.dto';
 import { Response } from 'express';
+import { CreateUserDto } from 'src/DTO/createUserDto';
 
 /**
  * AuthController maneja las solicitudes relacionadas con la autenticación.
@@ -18,14 +19,15 @@ export class AuthController {
    * @returns - Respuesta con estado HTTP y mensaje.
    */
   @Post('register')
-  async register(@Body() authDto: AuthDto, @Res() res: Response) {
+  async register(@Body() createUserDto: CreateUserDto, @Res() res: Response) {
     try {
-      const result = await this.authService.register(authDto);
-      res.status(HttpStatus.CREATED).json(result);
+      const user = await this.authService.register(createUserDto);
+      res.status(HttpStatus.CREATED).json(user); // Devuelve el usuario registrado
     } catch (error) {
       res.status(error.status || HttpStatus.INTERNAL_SERVER_ERROR).json({ message: error.message });
     }
   }
+
 
   /**
    * ? Maneja la solicitud POST para el inicio de sesión de un usuario.

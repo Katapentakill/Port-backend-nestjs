@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { JwtModule } from '@nestjs/jwt';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { User } from './entities/user';
@@ -21,6 +22,7 @@ import { ImageModule } from './image/image.module';
 import { UserSeeder } from './database/seeders/user.seeder';
 import { TaskSeeder } from './database/seeders/task.seeder';
 import { UserSeeder2 } from './database/seeders/user2.seeder';
+import { AdminSeeder } from './database/seeders/admin.seeder';
 
 @Module({
   imports: [
@@ -38,9 +40,22 @@ import { UserSeeder2 } from './database/seeders/user2.seeder';
     StatusModule,
     TagModule,
     RoleModule,
-    ImageModule
+    ImageModule,
+    JwtModule.register({
+      secret: 'your-secret-key',
+      signOptions: { expiresIn: '60m' },
+    }),
   ],
   controllers: [AppController],
-  providers: [AppService, RoleSeeder, StatusSeeder, TagSeeder, UserSeeder, TaskSeeder, UserSeeder2],
+  providers: [
+    AppService,
+    RoleSeeder,
+    StatusSeeder,
+    TagSeeder,
+    UserSeeder,
+    TaskSeeder,
+    UserSeeder2,
+    AdminSeeder,
+  ],
 })
 export class AppModule {}
