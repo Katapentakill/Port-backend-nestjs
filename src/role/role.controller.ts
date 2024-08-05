@@ -8,6 +8,7 @@ export class RoleController {
     constructor(private readonly roleService: RoleService) {}
 
     /**
+     * TODO
      * ! Endpoint para obtener todos los roles.
      * @param res - Objeto de respuesta HTTP.
      * @returns Una lista de todos los roles.
@@ -23,6 +24,7 @@ export class RoleController {
     }
 
     /**
+     * TODO
      * ! Endpoint para eliminar un rol específico.
      * @param roleId - ID del rol a eliminar.
      * @param res - Objeto de respuesta HTTP.
@@ -39,6 +41,7 @@ export class RoleController {
     }
 
     /**
+     * TODO
      * ! Endpoint para actualizar un rol específico.
      * @param roleId - ID del rol a actualizar.
      * @param body - Objeto con los datos del rol a actualizar (nombre).
@@ -56,6 +59,7 @@ export class RoleController {
     }
 
     /**
+     * TODO
      * ! Endpoint para crear un nuevo rol.
      * @param body - Objeto con los datos del nuevo rol (nombre).
      * @param res - Objeto de respuesta HTTP.

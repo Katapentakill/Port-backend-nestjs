@@ -13,6 +13,7 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   /**
+   * TODO
    * ? Maneja la solicitud POST para registrar un nuevo usuario.
    * @param authDto - Objeto que contiene el email y la contraseña del nuevo usuario.
    * @param res - El objeto de respuesta.
@@ -30,6 +31,7 @@ export class AuthController {
 
 
   /**
+   * TODO
    * ? Maneja la solicitud POST para el inicio de sesión de un usuario.
    * @param authDto - Objeto que contiene el email y la contraseña del usuario.
    * @param res - El objeto de respuesta.

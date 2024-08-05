@@ -8,6 +8,7 @@ export class ImageController {
   constructor(private readonly imageService: ImageService) {}
 
   /**
+   * TODO
    * ? Maneja la carga de imágenes.
    * Utiliza FileInterceptor para procesar archivos enviados en la solicitud.
    * @param file - El archivo cargado.

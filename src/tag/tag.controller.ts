@@ -9,6 +9,7 @@ export class TagController {
     constructor(private readonly tagService: TagService) {}
 
     /**
+     * TODO
      * ? Endpoint para obtener todos los tags.
      * @returns Una promesa que resuelve a un array de tags.
      */
@@ -22,6 +23,7 @@ export class TagController {
     }
 
     /**
+     * TODO
      * ! Endpoint para eliminar un tag por su ID.
      * @param tagId - El ID del tag a eliminar.
      * @returns Una promesa que resuelve a un mensaje de éxito.
@@ -36,6 +38,7 @@ export class TagController {
     }
 
     /**
+     * TODO
      * ! Endpoint para actualizar un tag.
      * @param updateTagDto - DTO que contiene los datos de actualización del tag.
      * @returns Una promesa que resuelve a un mensaje de éxito.
@@ -50,6 +53,7 @@ export class TagController {
     }
 
     /**
+     * TODO
      * ? Endpoint para crear un nuevo tag.
      * @param createTagDto - DTO que contiene los datos de creación del tag.
      * @returns Una promesa que resuelve a un mensaje de éxito.

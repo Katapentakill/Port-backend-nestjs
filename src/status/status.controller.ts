@@ -8,6 +8,7 @@ export class StatusController {
     constructor(private readonly statusService: StatusService) {}
 
     /**
+     * TODO
      * ? Endpoint para obtener todos los estados.
      * @param res - El objeto de respuesta.
      * @returns Una promesa que resuelve a un array de estados.
@@ -23,6 +24,7 @@ export class StatusController {
     }
 
     /**
+     * TODO
      * ? Endpoint para eliminar un estado por su ID.
      * @param statusId - El ID del estado a eliminar.
      * @param res - El objeto de respuesta.
@@ -39,6 +41,7 @@ export class StatusController {
     }
 
     /**
+     * TODO
      * ! Endpoint para actualizar un estado.
      * @param status - La entidad de estado con los datos actualizados.
      * @param res - El objeto de respuesta.
@@ -55,6 +58,7 @@ export class StatusController {
     }
 
     /**
+     * TODO
      * ? Endpoint para crear un nuevo estado.
      * @param name - El nombre del estado a crear.
      * @param res - El objeto de respuesta.

@@ -13,7 +13,8 @@ export class TaskController {
     constructor(private readonly taskService: TaskService) {}
 
     /**
-     * Endpoint para crear una nueva tarea.
+     * TODO
+     *  Endpoint para crear una nueva tarea.
      * @param taskCreateDto - DTO que contiene los datos necesarios para la creación de la tarea.
      * @returns Una promesa que resuelve con la tarea creada.
      */
@@ -39,6 +40,7 @@ export class TaskController {
     }
 
     /**
+     * TODO
      * Endpoint para eliminar una tarea por su ID.
      * @param taskId - El ID de la tarea a eliminar.
      * @returns Una promesa que resuelve con un mensaje de éxito.
@@ -55,6 +57,7 @@ export class TaskController {
     }
 
     /**
+     * TODO
      * Endpoint para asignar un usuario a una tarea.
      * @param taskId - El ID de la tarea.
      * @param userId - El ID del usuario a asignar.
@@ -72,6 +75,7 @@ export class TaskController {
     }
 
     /**
+     * TODO
      * Endpoint para obtener todas las tareas.
      * @returns Una promesa que resuelve con un array de tareas.
      * @throws HttpException si ocurre un error durante la obtención.
@@ -87,6 +91,7 @@ export class TaskController {
     }
 
     /**
+     * TODO
      * Endpoint para obtener una tarea por su ID.
      * @param taskId - El ID de la tarea a obtener.
      * @returns Una promesa que resuelve con la tarea.
@@ -102,6 +107,7 @@ export class TaskController {
     }
 
     /**
+     * TODO
      * Endpoint para asignar un estado a una tarea.
      * @param statusId - El ID del estado a asignar.
      * @param taskId - El ID de la tarea.
@@ -119,6 +125,7 @@ export class TaskController {
     }
 
     /**
+     * TODO
      * Endpoint para asignar una etiqueta a una tarea.
      * @param tagId - El ID de la etiqueta a asignar.
      * @param taskId - El ID de la tarea.
@@ -136,6 +143,7 @@ export class TaskController {
     }
 
     /**
+     * TODO
      * Endpoint para obtener todas las tareas con sus etiquetas.
      * @returns Una promesa que resuelve con un array de tareas con etiquetas.
      */
@@ -146,6 +154,7 @@ export class TaskController {
     }
 
     /**
+     * TODO
      * Endpoint para obtener una tarea por su ID, incluyendo sus etiquetas.
      * @param taskId - El ID de la tarea a obtener.
      * @returns Una promesa que resuelve con la tarea y sus etiquetas.
@@ -173,6 +182,7 @@ export class TaskController {
     }
 
     /**
+     * TODO
      * Endpoint para eliminar una etiqueta de una tarea.
      * @param tagId - El ID de la etiqueta a eliminar.
      * @param taskId - El ID de la tarea.

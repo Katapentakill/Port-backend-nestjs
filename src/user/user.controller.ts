@@ -15,6 +15,7 @@ export class UserController {
   ) {}
 
   /**
+   * TODO
    * Obtiene todos los usuarios.
    * @returns Una promesa que resuelve a una lista de objetos UserDto.
    */
@@ -24,6 +25,7 @@ export class UserController {
   }
 
   /**
+   * TODO
    * Obtiene un usuario específico por su ID.
    * @param userId El ID del usuario a obtener.
    * @returns Una promesa que resuelve a un objeto UserDto.
@@ -34,6 +36,7 @@ export class UserController {
   }
 
   /**
+   * TODO
    * Elimina un usuario específico por su ID.
    * @param userId El ID del usuario a eliminar.
    * @returns Un objeto con un mensaje de éxito.
@@ -45,6 +48,7 @@ export class UserController {
   }
 
   /**
+   * TODO
    * Sube una nueva imagen para un usuario específico.
    * @param userId El ID del usuario para el cual se subirá la imagen.
    * @param file El archivo de imagen que se sube.
@@ -81,6 +85,7 @@ export class UserController {
   }
 
   /**
+   * TODO
    * Crea un nuevo usuario con los datos proporcionados.
    * @param createUserDto Los datos para crear el nuevo usuario.
    * @returns Una promesa que resuelve a un objeto UserDto del usuario creado.
@@ -102,6 +107,7 @@ export class UserController {
   }
 
   /**
+   * TODO
    * Busca usuarios según los criterios proporcionados.
    * @param name El nombre del usuario a buscar.
    * @param lastname El apellido del usuario a buscar.

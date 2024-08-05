@@ -12,6 +12,7 @@ export class TaskSimilarityController {
   constructor(private readonly taskSimilarityService: TaskSimilarityService) {}
 
   /**
+   * TODO
    * Endpoint para obtener la similitud entre descripciones de tareas.
    * @param body - Objeto que contiene las descripciones normalizadas de habilidades, experiencia y tarea.
    * @returns Una promesa que resuelve con el resultado de la similitud calculada por el servicio.
