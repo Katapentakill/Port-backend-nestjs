@@ -16,13 +16,21 @@ export class TaskSimilarityService {
    * @throws Error si ocurre un problema al ejecutar el script de Python.
    */
   async getSimilarity(requiredSkillsNormalized: string, requiredExpertiseNormalized: string, descriptionNormalized: string): Promise<any> {
-    const scriptPath = 'D:\\Escritorio\\ProyectosAleEstudio\\Machine learning\\script3.py';
-    const command = `python "${scriptPath}" "${requiredSkillsNormalized}" "${requiredExpertiseNormalized}" "${descriptionNormalized}"`;
+    const scriptPath = 'D:\\Ale\\Recomend System\\Machine-learning-Gestion-Tareas\\script3.py';
+    const pythonExecutable = 'D:\\Pyt\\python.exe'; // Ruta al python.exe
+    const command = `"${pythonExecutable}" "${scriptPath}" "${requiredSkillsNormalized}" "${requiredExpertiseNormalized}" "${descriptionNormalized}"`;
+
     try {
-      const { stdout } = await execPromise(command);
-      return JSON.parse(stdout);
+      const { stdout, stderr } = await execPromise(command);
+      if (stderr) {
+        console.error('Python script stderr:', stderr); // Verifica si hay errores en la ejecución del script
+      }
+      console.log('Python script stdout:', stdout); // Verifica la salida del script
+      return JSON.parse(stdout); // Asegúrate de que stdout sea un JSON válido
     } catch (error) {
+      console.error('Error executing Python script:', error.message);
+      console.error('Stack trace:', error.stack);
       throw new Error('Error executing the Python script');
     }
-  }
+  }  
 }

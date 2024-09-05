@@ -2,6 +2,8 @@ import { Injectable, Logger } from '@nestjs/common';
 import { Connection } from 'typeorm';
 import { User } from '../../entities/user';
 import { Role } from '../../entities/role';
+import * as bcrypt from 'bcrypt';
+import { normalizeText } from 'src/utils/normalizeText';
 
 @Injectable()
 export class UserSeeder2 {
@@ -25,99 +27,124 @@ export class UserSeeder2 {
       // Datos de ejemplo de usuarios
       const users = [
         {
-          email: 'john.doe@example.com',
-          name: 'John',
-          lastname: 'Doe',
-          job: 'Backend Developer',
-          curriculum: 'Desarrollador Backend con más de 5 años de experiencia en el desarrollo de aplicaciones escalables y mantenibles. Experiencia en la construcción de APIs RESTful, integración con bases de datos, y optimización de rendimiento. Competente en el uso de tecnologías como Node.js, Express, y SQL.',
-          curriculumNormalized: 'desarrollador backend años experiencia desarrollo aplicaciones escalables mantenibles construccion apis restful integracion bases datos optimizacion rendimiento competente tecnologias nodejs express sql',
-          password: 'securepassword123',
-          image: 'https://example.com/image1.jpg',
-          roleId: userRole.id,
-          skills: 'Desarrollo Backend, APIs RESTful, Node.js, Express, SQL, Optimización de rendimiento',
-          skillsNormalized: 'desarrollo backend apis restful nodejs express sql optimizacion rendimiento',
-          expertise: 'Experto en la creación de APIs eficientes y escalables. Capacidad para diseñar e implementar soluciones backend robustas. Experiencia en la integración de servicios y la optimización de procesos de desarrollo.',
-          expertiseNormalized: 'experto creacion apis eficientes escalables capacidad diseñar implementar soluciones backend robustas experiencia integracion servicios optimizacion procesos desarrollo',
-        },
-        {
-          email: 'jane.doe@example.com',
-          name: 'Jane',
-          lastname: 'Doe',
-          job: 'UI/UX Designer',
-          curriculum: 'Diseñadora UI/UX con más de 6 años de experiencia en la creación de interfaces de usuario intuitivas y estéticamente agradables. Experiencia en el uso de herramientas de diseño como Figma, Adobe XD, y Sketch. Habilidad para realizar investigaciones de usuarios y aplicar principios de diseño centrados en el usuario.',
-          curriculumNormalized: 'diseñadora ui ux años experiencia creacion interfaces usuario intuitivas esteticamente agradables experiencia herramientas diseno figma adobe xd sketch habilidad realizar investigaciones usuarios principios diseno centrados usuario',
-          password: 'anothersecurepassword',
-          image: 'https://example.com/image2.jpg',
-          roleId: userRole.id,
-          skills: 'Diseño de Interfaces, Figma, Adobe XD, Sketch, Investigación de Usuarios',
-          skillsNormalized: 'diseno interfaces figma adobe xd sketch investigacion usuarios',
-          expertise: 'Experta en la creación de interfaces visuales efectivas y atractivas. Experiencia en la investigación de necesidades de usuarios y aplicación de principios de diseño. Capacidad para colaborar estrechamente con equipos de desarrollo para lograr una experiencia de usuario coherente.',
-          expertiseNormalized: 'experta creacion interfaces visuales efectivas atractivas experiencia investigacion necesidades usuarios aplicacion principios diseno capacidad colaborar estrechamente equipos desarrollo experiencia usuario coherente',
-        },
-        {
-          email: 'michael.johnson@example.com',
-          name: 'Michael',
+          email: 'emma.johnson@example.com',
+          name: 'Emma',
           lastname: 'Johnson',
-          job: 'Marketing Specialist',
-          curriculum: 'Especialista en Marketing con 7 años de experiencia en la planificación y ejecución de campañas de marketing digital. Experto en el análisis de datos de mercado, creación de estrategias de contenido y gestión de campañas publicitarias. Conocimiento avanzado de herramientas de SEO y SEM.',
-          curriculumNormalized: 'especialista marketing años experiencia planificacion ejecucion campañas marketing digital experto analisis datos mercado creacion estrategias contenido gestion campañas publicitarias conocimiento avanzado herramientas seo sem',
-          password: 'yetanothersecurepassword',
-          image: 'https://example.com/image3.jpg',
-          roleId: userRole.id,
-          skills: 'Marketing Digital, Análisis de Datos, Estrategias de Contenido, SEO, SEM',
-          skillsNormalized: 'marketing digital analisis datos estrategias contenido seo sem',
-          expertise: 'Experto en el desarrollo e implementación de estrategias de marketing digital. Capacidad para analizar datos del mercado y ajustar campañas para maximizar el impacto. Experiencia en la gestión de campañas publicitarias y optimización de contenido para SEO y SEM.',
-          expertiseNormalized: 'experto desarrollo implementacion estrategias marketing digital capacidad analizar datos mercado ajustar campañas maximizar impacto experiencia gestion campañas publicitarias optimizacion contenido seo sem',
-        },
-        {
-          email: 'emily.clark@example.com',
-          name: 'Emily',
-          lastname: 'Clark',
-          job: 'Project Manager',
-          curriculum: 'Gestora de Proyectos con más de 8 años de experiencia liderando equipos multidisciplinarios en la entrega de proyectos complejos. Experta en la planificación, ejecución y seguimiento de proyectos, asegurando la entrega a tiempo y dentro del presupuesto. Competente en el uso de metodologías ágiles como Scrum y Kanban.',
-          curriculumNormalized: 'gestora proyectos años experiencia liderando equipos multidisciplinarios entrega proyectos complejos experta planificacion ejecucion seguimiento proyectos asegurando entrega tiempo dentro presupuesto competente metodologias agiles scrum kanban',
-          password: 'strongpassword',
-          image: 'https://example.com/image4.jpg',
-          roleId: userRole.id,
-          skills: 'Gestión de Proyectos, Scrum, Kanban, Planificación, Ejecución',
-          skillsNormalized: 'gestion proyectos scrum kanban planificacion ejecucion',
-          expertise: 'Experta en la gestión de proyectos complejos, asegurando la entrega puntual y eficiente. Experiencia en la implementación de metodologías ágiles para mejorar la productividad del equipo. Habilidad para coordinar múltiples partes interesadas y manejar riesgos.',
-          expertiseNormalized: 'experta gestion proyectos complejos asegurando entrega puntual eficiente experiencia implementacion metodologias agiles mejorar productividad equipo habilidad coordinar multiples partes interesadas manejar riesgos',
-        },
-        {
-          email: 'daniel.williams@example.com',
-          name: 'Daniel',
-          lastname: 'Williams',
-          job: 'Data Analyst',
-          curriculum: 'Analista de Datos con 5 años de experiencia en el análisis e interpretación de datos para apoyar la toma de decisiones empresariales. Experto en el uso de herramientas de análisis de datos como Python, R y SQL. Habilidad para construir modelos predictivos y realizar análisis estadísticos detallados.',
-          curriculumNormalized: 'analista datos años experiencia analisis interpretacion datos apoyar toma decisiones empresariales experto herramientas analisis datos python r sql habilidad construir modelos predictivos realizar analisis estadisticos detallados',
-          password: 'securepassword789',
-          image: 'https://example.com/image5.jpg',
-          roleId: userRole.id,
-          skills: 'Análisis de Datos, Python, R, SQL, Modelos Predictivos',
-          skillsNormalized: 'analisis datos python r sql modelos predictivos',
-          expertise: 'Experto en la interpretación y análisis de grandes volúmenes de datos para generar información útil para la toma de decisiones. Experiencia en la construcción de modelos predictivos y análisis estadístico avanzado. Capacidad para comunicar hallazgos de manera clara y efectiva.',
-          expertiseNormalized: 'experto interpretacion analisis grandes volumenes datos generar informacion util toma decisiones experiencia construccion modelos predictivos analisis estadistico avanzado capacidad comunicar hallazgos manera clara efectiva',
-        },
-        {
-          email: 'sophia.lopez@example.com',
-          name: 'Sophia',
-          lastname: 'Lopez',
-          job: 'Frontend Developer',
-          curriculum: 'Desarrolladora Frontend con más de 4 años de experiencia en la creación de aplicaciones web interactivas. Experta en tecnologías frontend como React, Angular y Vue.js. Habilidad para colaborar con diseñadores y desarrolladores backend para construir interfaces de usuario funcionales y atractivas.',
-          curriculumNormalized: 'desarrolladora frontend años experiencia creacion aplicaciones web interactivas experta tecnologias frontend react angular vuejs habilidad colaborar diseñadores desarrolladores backend construir interfaces usuario funcionales atractivas',
-          password: 'password1234',
+          job: 'Backend Developer',
+          password: 'security1234',
           image: 'https://example.com/image6.jpg',
           roleId: userRole.id,
-          skills: 'Desarrollo Frontend, React, Angular, Vue.js, Interfaz de Usuario',
-          skillsNormalized: 'desarrollo frontend react angular vuejs interfaz usuario',
-          expertise: 'Experta en la creación de interfaces de usuario ricas y funcionales utilizando tecnologías frontend modernas. Capacidad para trabajar en estrecha colaboración con equipos de diseño y backend. Experiencia en la implementación de soluciones eficientes y optimizadas.',
-          expertiseNormalized: 'experta creacion interfaces usuario ricas funcionales utilizando tecnologias frontend modernas capacidad trabajar estrecha colaboracion equipos diseno backend experiencia implementacion soluciones eficientes optimizadas',
+          curriculum: 'Desarrolladora Backend con más de 6 años de experiencia en la creación de sistemas robustos y escalables. Experta en la programación con Node.js y Python, con un enfoque en la creación de APIs eficientes y seguras. Ha trabajado en la optimización de bases de datos tanto SQL como NoSQL, liderando la arquitectura de microservicios en entornos distribuidos. Además, tiene experiencia en la resolución de problemas complejos de rendimiento y la integración de soluciones con servicios en la nube.',
+          skills: 'Desarrollo Backend, manejo experto en Node.js y Python, creación y optimización de bases de datos SQL y NoSQL, diseño de arquitecturas de microservicios, integración de servicios en la nube, soluciones a problemas de escalabilidad y rendimiento.',
+          expertise: 'Emma es experta en la construcción de sistemas backend robustos, diseñando arquitecturas distribuidas con microservicios que garantizan escalabilidad y eficiencia. Domina técnicas de optimización de bases de datos y es capaz de integrar sistemas complejos a la nube para mejorar el rendimiento y la seguridad de las aplicaciones web.',
+        },
+        
+        {
+          email: 'oliver.williams@example.com',
+          name: 'Oliver',
+          lastname: 'Williams',
+          job: 'UX/UI Designer',
+          password: 'security1234',
+          image: 'https://example.com/image6.jpg',
+          roleId: userRole.id,
+          curriculum: 'Diseñador UX/UI con 5 años de experiencia en la creación de interfaces de usuario que combinan funcionalidad con un diseño estético atractivo. Tiene un dominio completo de herramientas de diseño como Adobe XD, Figma y Sketch, y una gran habilidad para transformar requerimientos de usuario en prototipos interactivos. Ha trabajado en proyectos donde ha dirigido investigaciones de usuario, pruebas de usabilidad, y optimización de interfaces.',
+          skills: 'Diseño de interfaces de usuario intuitivas, experiencia avanzada en Adobe XD, Figma y Sketch, creación de prototipos interactivos, investigación de usuarios, pruebas de usabilidad, diseño centrado en el usuario.',
+          expertise: 'Oliver es experto en diseñar experiencias de usuario que equilibren la usabilidad con una estética moderna. Tiene la capacidad de liderar equipos multidisciplinarios, analizar feedback de usuarios, y realizar mejoras continuas que resulten en interfaces más eficientes y atractivas.',
+        },
+        
+        {
+          email: 'ava.martinez@example.com',
+          name: 'Ava',
+          lastname: 'Martinez',
+          job: 'Data Scientist',
+          password: 'security1234',
+          image: 'https://example.com/image6.jpg',
+          roleId: userRole.id,
+          curriculum: 'Científica de Datos con más de 7 años de experiencia en el análisis de datos y la creación de modelos predictivos avanzados. Tiene un conocimiento profundo de herramientas como Python y R, y utiliza técnicas de Machine Learning para resolver problemas complejos de análisis de grandes volúmenes de datos. Su experiencia incluye la creación de dashboards interactivos, informes detallados que apoyan decisiones estratégicas, y la integración de datos provenientes de diferentes fuentes para generar insights útiles.',
+          skills: 'Ciencia de Datos, análisis predictivo avanzado, Python, R, técnicas de Machine Learning, creación de dashboards interactivos, análisis y visualización de grandes volúmenes de datos, integración de múltiples fuentes de datos.',
+          expertise: 'Ava es experta en transformar datos en valor estratégico mediante el uso de técnicas avanzadas de análisis y Machine Learning. Tiene la capacidad de interpretar grandes cantidades de datos, generar informes que orienten decisiones empresariales, y crear modelos predictivos que mejoran la eficiencia operativa y competitividad de las empresas.',
+        },
+        
+        {
+          email: 'liam.brown@example.com',
+          name: 'Liam',
+          lastname: 'Brown',
+          job: 'DevOps Engineer',
+          password: 'security1234',
+          image: 'https://example.com/image6.jpg',
+          roleId: userRole.id,
+          curriculum: 'Ingeniero DevOps con más de 5 años de experiencia en la automatización y optimización de los procesos de desarrollo y operaciones. Tiene amplios conocimientos en CI/CD, AWS, y Azure, gestionando infraestructuras en la nube y pipelines de despliegue. Ha trabajado en la implementación de sistemas de integración continua que mejoran el ciclo de vida del software y aseguran un rendimiento óptimo de los sistemas distribuidos.',
+          skills: 'DevOps, automatización de procesos, integración continua (CI/CD), gestión de infraestructuras en la nube con AWS y Azure, optimización de pipelines de despliegue, administración de sistemas distribuidos.',
+          expertise: 'Liam es experto en implementar prácticas de DevOps que mejoran el flujo de trabajo entre desarrollo y operaciones, con un enfoque en la automatización y optimización del ciclo de vida del software. Su experiencia en el uso de AWS y Azure le permite gestionar infraestructuras complejas y garantizar que los despliegues se realicen de forma eficiente y segura.',
+        },
+        
+        {
+          email: 'mia.jones@example.com',
+          name: 'Mia',
+          lastname: 'Jones',
+          job: 'Mobile App Developer',
+          password: 'security1234',
+          image: 'https://example.com/image6.jpg',
+          roleId: userRole.id,
+          curriculum: 'Desarrolladora de Aplicaciones Móviles con más de 4 años de experiencia en el diseño y desarrollo de aplicaciones nativas y multiplataforma para iOS y Android. Tiene un conocimiento profundo en el uso de frameworks como React Native y Flutter, lo que le permite crear aplicaciones eficientes y con interfaces atractivas. Su enfoque está en la experiencia del usuario, asegurando que las aplicaciones sean fáciles de usar y visualmente impactantes.',
+          skills: 'Desarrollo de aplicaciones móviles nativas y multiplataforma, experiencia avanzada en React Native y Flutter, diseño de interfaces para iOS y Android, enfoque en experiencia de usuario (UX/UI), optimización de aplicaciones para dispositivos móviles.',
+          expertise: 'Mia es experta en el desarrollo de aplicaciones móviles que combinan rendimiento y diseño. Tiene la capacidad de diseñar interfaces de usuario intuitivas, asegurando que cada aplicación se ejecute de manera fluida en dispositivos iOS y Android. Además, su conocimiento en frameworks modernos le permite crear aplicaciones innovadoras que responden a las necesidades del mercado móvil.',
+        },
+        
+        {
+          email: 'noah.smith@example.com',
+          name: 'Noah',
+          lastname: 'Smith',
+          job: 'Security Analyst',
+          password: 'security1234',
+          image: 'https://example.com/image6.jpg',
+          roleId: userRole.id,
+          curriculum: 'Analista de Seguridad con más de 6 años de experiencia en la identificación y mitigación de amenazas a la seguridad de sistemas. Ha trabajado en la implementación de medidas de seguridad para proteger redes y sistemas críticos, realizando auditorías de seguridad, análisis de vulnerabilidades, y pruebas de penetración. Es un experto en la creación de soluciones que garantizan la integridad de la infraestructura tecnológica y la protección de datos sensibles.',
+          skills: 'Seguridad de la información, análisis de vulnerabilidades, auditorías de seguridad, pruebas de penetración, implementación de medidas de seguridad, protección de datos críticos y sistemas.',
+          expertise: 'Noah es experto en garantizar la seguridad de sistemas y redes mediante la identificación de amenazas y la implementación de soluciones preventivas. Su experiencia en auditorías y pruebas de penetración le permite detectar y corregir vulnerabilidades, asegurando que las infraestructuras tecnológicas estén bien protegidas contra ataques cibernéticos.',
+        },
+        
+        {
+          email: 'ava.garcia@example.com',
+          name: 'Ava',
+          lastname: 'Garcia',
+          job: 'Project Manager',
+          password: 'security1234',
+          image: 'https://example.com/image6.jpg',
+          roleId: userRole.id,
+          curriculum: 'Gerente de Proyectos con más de 8 años de experiencia en la planificación, ejecución y seguimiento de proyectos complejos en diversas industrias. Es experta en metodologías ágiles como Scrum y Kanban, y ha liderado equipos multidisciplinarios para la entrega exitosa de proyectos. Su enfoque está en la gestión eficiente del tiempo, presupuesto y riesgos, asegurando que los objetivos de cada proyecto se cumplan de manera efectiva y dentro del cronograma.',
+          skills: 'Gestión de proyectos, metodologías ágiles (Scrum, Kanban), planificación estratégica, gestión de riesgos y presupuesto, liderazgo de equipos multidisciplinarios, seguimiento y control de proyectos.',
+          expertise: 'Ava es experta en dirigir proyectos desde su fase inicial hasta la entrega, asegurando que los resultados sean eficientes y cumplan con las expectativas del cliente. Su habilidad para gestionar múltiples variables, como el tiempo, presupuesto, y los recursos humanos, garantiza la finalización exitosa de proyectos complejos dentro de plazos ajustados.',
+        },
+        
+        {
+          email: 'liam.lee@example.com',
+          name: 'Liam',
+          lastname: 'Lee',
+          job: 'Systems Analyst',
+          password: 'security1234',
+          image: 'https://example.com/image6.jpg',
+          roleId: userRole.id,
+          curriculum: 'Analista de Sistemas con más de 5 años de experiencia en el diseño y análisis de soluciones tecnológicas para empresas. Ha trabajado en la recopilación de requisitos, elaboración de especificaciones técnicas y la identificación de soluciones que mejoren la eficiencia operativa. Su experiencia incluye colaborar con equipos de desarrollo para asegurar que las soluciones técnicas se alineen con los objetivos del negocio y mejoren la productividad general.',
+          skills: 'Análisis de sistemas, recolección de requisitos, diseño de soluciones tecnológicas, elaboración de especificaciones técnicas, mejora de la eficiencia operativa, colaboración con equipos de desarrollo.',
+          expertise: 'Liam es experto en analizar sistemas y desarrollar soluciones tecnológicas que satisfacen las necesidades empresariales. Tiene una capacidad probada para identificar mejoras en procesos tecnológicos, diseñar soluciones eficientes, y trabajar estrechamente con equipos técnicos para garantizar que las implementaciones sean exitosas y alineadas con los objetivos del negocio.',
         },
       ];
+      
 
       for (const userData of users) {
-        const user = userRepository.create(userData);
+        // Encriptar la contraseña
+        const hashedPassword = await bcrypt.hash(userData.password, 10);
+
+        // Crear el usuario con la contraseña encriptada y datos normalizados
+        const user = userRepository.create({
+          ...userData,
+          password: hashedPassword,
+          curriculumNormalized: normalizeText(userData.curriculum),
+          skillsNormalized: normalizeText(userData.skills),
+          expertiseNormalized: normalizeText(userData.expertise),
+        });
+
         await userRepository.save(user);
         this.logger.log(`Seeded user: ${user.name} ${user.lastname} with email: ${user.email}`);
       }
